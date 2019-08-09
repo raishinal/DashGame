@@ -12,16 +12,13 @@
 
         
         <title>Registration page</title>
+        <jsp:include page="Head.jsp"/>
     </head>
     <body>
+           <jsp:include page="nav.jsp"/>
         
             <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
-		<div class="row">
-			<ol class="breadcrumb">
-				<li><a href="<c:url value="/Index"/>"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">Sign Up</li>
-			</ol>
-		</div><!--/.row-->
+		
 		
 		<div class="row">
 			<div class="col-lg-12">
@@ -93,13 +90,6 @@
                                         </div>
                                       
                                         <div class="form-group">
-                                            <label>User Type</label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="userType"  value="ROLE_USER" checked>User
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="userType"  value="ROLE_RETAILER" >Retailer
-                                            </label>
                                             <label class="radio-inline">
                                                 <input type="radio" name="userType" value="ROLE_ADMIN">Admin
                                             </label>

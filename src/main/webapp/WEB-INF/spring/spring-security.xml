@@ -7,11 +7,9 @@
         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 ">
     
-<!--        <security:http auto-config="true" use-expressions="true">
+        <security:http auto-config="true" use-expressions="true">
       
-        <security:intercept-url pattern="/User/**" access="hasRole('ROLE_USER')"/>
-        <security:intercept-url pattern="/Retailer/**" access="hasRole('ROLE_RETAILER')"/>
-        <security:intercept-url pattern="/Admins/**" access="hasRole('ROLE_ADMIN')"/>
+        <security:intercept-url pattern="/Admin/**" access="hasRole('ROLE_ADMIN')"/>
         <security:form-login username-parameter="username"
                              password-parameter="password"
                              default-target-url="/Admin/Home"
@@ -36,13 +34,13 @@
             <security:password-encoder ref="bcryptEncoder"/>
         </security:authentication-provider>
     </security:authentication-manager>
- 
--->    <bean id="bcryptEncoder" 
-          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/><!--
+
+    <bean id="bcryptEncoder" 
+          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <bean id="customSuccessHandler" 
     class="com.dgame.config.CustomSuccessHandler" />
--->
+
 
 
 </beans>

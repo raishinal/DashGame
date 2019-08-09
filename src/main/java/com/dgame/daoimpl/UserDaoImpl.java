@@ -39,7 +39,7 @@ public class UserDaoImpl implements UserDao {
             ur.setAuthority("ROLE_RETAILER");
         }
         else {
-            ud.setActive(0);
+            ud.setActive(1);
             ur.setAuthority("ROLE_ADMIN");
         }
         ud.setUserRole(ur);

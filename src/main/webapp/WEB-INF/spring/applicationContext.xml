@@ -39,5 +39,8 @@
     
     <bean id="user_details" class="com.dgame.models.UserDetails"></bean>
     <bean id="user_login" class="com.dgame.models.UserRole"></bean>
+    <bean id="RunningGame" class="com.dgame.models.RunningGame"></bean>
+    <bean id="GameStatistics" class="com.dgame.models.GameStatistics"></bean>
+    <bean id="Upcoming" class="com.dgame.models.Upcoming"></bean>
  
 </beans>

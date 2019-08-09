@@ -5,7 +5,14 @@
  */
 package com.dgame.controller;
 
+import com.dgame.dao.GameStatDao;
+import com.dgame.dao.RunGameDao;
+import com.dgame.models.GameStatistics;
+import com.dgame.models.RunningGame;
+import com.dgame.models.Upcoming;
 import com.dgame.models.UserDetails;
+import com.dgame.service.GameStatService;
+import com.dgame.service.UpcomeService;
 import com.dgame.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +51,18 @@ public class AdminController {
 
     @Autowired
     private UserDetails userDetails;
+ 
+    @Autowired
+    GameStatistics gameStatistics;
+
+    @Autowired
+    GameStatService gameStatService;
+    
+    @Autowired
+    UpcomeService upcomeService;
+    
+    @Autowired
+    Upcoming upcoming;
     
     
      @GetMapping("/Admin/Home")
@@ -50,6 +70,9 @@ public class AdminController {
         mv.setViewName("dashboard");
         return mv;
     }
+  
+    
+    
     @GetMapping("/Admin/Register")
     public ModelAndView registerUser(ModelAndView mv) {
 
@@ -57,6 +80,56 @@ public class AdminController {
 
         return mv;
     }
+    @GetMapping("/Admin/Statistics")
+    public ModelAndView gameStatistics(ModelAndView mv) {
+        mv.addObject("gs",gameStatService.findAllRunning());
+
+        mv.setViewName("games");
+
+        return mv;
+    }
+    @GetMapping("/Admin/Game/Delete/{id}")
+    public ModelAndView deleteresult(@PathVariable int id, ModelAndView mv) {
+        gameStatService.deleteRunning(id);
+        mv.addObject("gs",gameStatService.findAllRunning());
+
+        mv.setViewName("games");
+
+        return mv;
+    }
+    
+    @GetMapping("/Admin/Upcoming/Add")
+    public ModelAndView addUpcoming(ModelAndView mv) {
+
+        mv.setViewName("addupcoming");
+
+        return mv;
+    }
+    @GetMapping("/Admin/Upcoming/Manage")
+    public ModelAndView manageUpcoming(ModelAndView mv) {
+        mv.addObject("uc",upcomeService.findAllUpcome());
+        mv.setViewName("manageupcoming");
+
+        return mv;
+    }
+    
+      @RequestMapping(value = "/Admin/Upcoming/Save", method = RequestMethod.POST)
+    public String addUpcomings(
+            @RequestParam("name1") String name1,
+            @RequestParam("name2") String name2,
+            @RequestParam("start")String start
+    ){
+       upcoming.setName1(name1);
+       upcoming.setName2(name2);
+       upcoming.setStart(LocalDateTime.parse(start));
+       if(upcomeService.addUpcomeGame(upcoming)){
+            return "redirect:/Admin/Upcoming/Add?Success";
+       }
+       else{
+            return "redirect:/Admin/Upcoming/Add?Failure";
+       }
+    }
+    
 
     @RequestMapping(value = "/Admin/RegisterUser", method = RequestMethod.POST)
     public String registerUser(
@@ -112,4 +185,50 @@ public class AdminController {
 
         return "redirect:/Admin/Register?Success";
     }
+    
+    
+       @RequestMapping(value="/Admin/Upcoming/Delete/{id}", method=RequestMethod.GET)
+   public String deleteProduct(@PathVariable("id") int id){
+
+        if(upcomeService.deleteUpcoming(id)){
+         return "redirect:/Admin/Upcoming/Manage?Delete success"; 
+
+    }
+        else{
+            return "redirect:/Admin/Upcoming/Manage?DeleteFailed"; 
+        }
+      
+   }
+    
+       @RequestMapping(value="/Admin/Upcoming/Edit/{id}", method=RequestMethod.GET)
+   public ModelAndView editUpcoming(@PathVariable int id,ModelAndView mv){
+        mv.addObject("uc", upcomeService.findUpcommingById(id));
+        mv.setViewName("editupcome");
+        return mv;
+    }
+   
+   
+    
+    
+      @RequestMapping(value="/Admin/Upcoming/Update", method=RequestMethod.POST)
+    public ModelAndView updateUser(
+            @RequestParam("id") int id,
+            @RequestParam("name1") String name1,
+            @RequestParam("name2") String name2,
+            @RequestParam("start") String start,
+            ModelAndView mv
+            ){
+        upcoming.setId(id);
+        upcoming.setName1(name1);
+        upcoming.setName2(name2);
+        upcoming.setStart(LocalDateTime.parse(start));
+       
+        if(upcomeService.updateUpcoming(upcoming)){
+       mv.addObject("success","success");
+       }
+        mv.addObject("uc",upcomeService.findAllUpcome());
+       mv.setViewName("manageupcoming");
+       return mv;
+    }
+    
 }
